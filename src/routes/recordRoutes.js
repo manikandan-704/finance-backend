@@ -9,6 +9,7 @@ const {
   authenticateUser,
   authorizeRoles,
 } = require("../middlewares/authMiddleware");
+const { validate, recordSchema } = require('../middlewares/validator');
 
 const router = express.Router();
 
@@ -16,9 +17,9 @@ const router = express.Router();
 router.use(authenticateUser);
 
 // Routes
-router.post("/", authorizeRoles("Admin"), createRecord);
+router.post("/", authorizeRoles("Admin"), validate(recordSchema), createRecord);
 router.get("/", authorizeRoles("Admin", "Analyst"), getRecords);
-router.put("/:id", authorizeRoles("Admin"), updateRecord);
+router.put("/:id", authorizeRoles("Admin"), validate(recordSchema), updateRecord);
 router.delete("/:id", authorizeRoles("Admin"), deleteRecord);
 
 module.exports = router;
